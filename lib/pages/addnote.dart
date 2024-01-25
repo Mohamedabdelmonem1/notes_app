@@ -7,7 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:testproject/pages/homepage.dart';
+import 'homepage.dart';
 
 class Add extends StatefulWidget {
   const Add({Key? key}) : super(key: key);
@@ -37,13 +37,14 @@ class _AddState extends State<Add> {
   var ref;
 
   addnote(context) async {
-    if (image == null)
+    if (image == null) {
       return AwesomeDialog(
           padding: EdgeInsets.all(30),
           context: context,
           title: "important",
           body: Text("please choose image"))
         ..show();
+    }
     var formdata = formstate.currentState;
     if (formdata!.validate()) {
       showloading(context);
@@ -88,10 +89,10 @@ class _AddState extends State<Add> {
             },
             maxLength: 30,
             minLines: 1,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "title", prefixIcon: Icon(Icons.note)),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -110,10 +111,10 @@ class _AddState extends State<Add> {
             maxLength: 200,
             minLines: 1,
             maxLines: 3,
-            decoration: InputDecoration(
+            decoration:const InputDecoration(
                 labelText: "notes", prefixIcon: Icon(Icons.note)),
           ),
-          SizedBox(
+          const  SizedBox(
             height: 10,
           ),
           MaterialButton(
@@ -121,18 +122,16 @@ class _AddState extends State<Add> {
               showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return Container(
+                    return SizedBox(
                       height: 200,
                       child: Column(
                         children: [
-                          Container(
-                            child: Text(
-                              "Choose photo from",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(
+                           Text(
+                             "Choose photo from",
+                             style: TextStyle(
+                                 fontSize: 30, fontWeight: FontWeight.bold),
+                           ),
+                          const  SizedBox(
                             height: 20,
                           ),
                           MaterialButton(
@@ -150,7 +149,7 @@ class _AddState extends State<Add> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: Row(
+                            child:const Row(
                               children: [
                                 Icon(Icons.camera),
                                 SizedBox(
@@ -163,7 +162,7 @@ class _AddState extends State<Add> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           MaterialButton(
@@ -181,7 +180,7 @@ class _AddState extends State<Add> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: Row(
+                            child:const Row(
                               children: [
                                 Icon(Icons.photo_outlined),
                                 SizedBox(
@@ -200,25 +199,34 @@ class _AddState extends State<Add> {
                   });
             },
             child: Container(
-                width: 120,
+                width: 145,
                 height: 40,
-                decoration: BoxDecoration(color: Colors.amber),
-                child: Center(
-                    child: Text(
-                  "Add photo",
-                  style: TextStyle(fontSize: 20),
-                ))),
+                decoration: BoxDecoration(color: Colors.blue),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Add photo ",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    Icon(
+                      Icons.photo,
+                      color: Colors.white,
+                    )
+                  ],
+                )),
           ),
-          SizedBox(
+          const   SizedBox(
             height: 30,
           ),
           MaterialButton(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 35),
             color: Colors.blue,
             onPressed: () async {
               await addnote(context);
             },
-            child: Text(
+            child:const Text(
               "Add note",
               style: TextStyle(
                   color: Colors.white,

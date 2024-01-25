@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:testproject/pages/homepage.dart';
+
+import 'homepage.dart';
 
 class ViewPage extends StatefulWidget {
   final viewnote;
@@ -14,35 +15,32 @@ class ViewPage extends StatefulWidget {
 class _ViewPageState extends State<ViewPage> {
   @override
   Widget build(BuildContext context) {
-    bool visible = false;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("View note"),
       ),
-
-      body: Container(
-          child: Column(
+      body: Column(
         children: [
           Container(
               width: double.infinity,
               height: 330,
               child: Image.network("${widget.viewnote['imageurl']}",
                   fit: BoxFit.fill)),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Center(
-              child: Container(
-            child: Text(
-              "${widget.viewnote['title']}",
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold),
+            child: Container(
+              child: Text(
+                "${widget.viewnote['title']}",
+                style: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-          )),
-          SizedBox(
+          ),
+          const SizedBox(
             height: 20,
           ),
           Center(
@@ -50,7 +48,7 @@ class _ViewPageState extends State<ViewPage> {
             child: Text("${widget.viewnote['notes']}",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
           )),
-          SizedBox(
+          const SizedBox(
             height: 150,
           ),
           MaterialButton(
@@ -67,10 +65,12 @@ class _ViewPageState extends State<ViewPage> {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             },
-            child: Text("Add to cart"),
+            child:const Text("Add to cart",style: TextStyle(
+                fontSize: 20,
+                fontWeight:FontWeight.bold),),
           )
         ],
-      )),
+      ),
     );
   }
 }

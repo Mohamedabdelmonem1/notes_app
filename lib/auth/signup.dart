@@ -1,8 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:testproject/pages/homepage.dart';
 import 'package:testproject/auth/signin.dart';
+import '../pages/homepage.dart';
+
+
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -17,14 +19,16 @@ class _SignUpState extends State<SignUp> {
   var email;
   var password;
 
-  showloading() async {
+  showLoading() async {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             title: Text("please wait"),
-            content: Container(
-                height: 50, child: Center(child: CircularProgressIndicator())),
+            content: SizedBox(
+              height: 50,
+              child: Center(child: CircularProgressIndicator()),
+            ),
           );
         });
   }
@@ -34,7 +38,7 @@ class _SignUpState extends State<SignUp> {
     if (formdata!.validate()) {
       formdata.save();
       try {
-        showloading();
+        showLoading();
         final credential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
@@ -64,121 +68,131 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Form(
-            key: formstate,
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(top: 40, bottom: 60, left: 15),
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Form(
+              key: formstate,
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(top: 120, bottom: 60, left: 15),
+                    child: const Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    ),
+                    //Image.asset("images/image.jpg"),
                   ),
-                  //Image.asset("images/image.jpg"),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    onSaved: (val) {
-                      email = val;
-                    },
-                    validator: (val) {
-                      if (val!.length > 50) {
-                        return "email should be less than 50 ";
-                      }
-                      if (val.length < 5) {
-                        return "email should be larger than 5 ";
-                      }
-                    },
-                    decoration: InputDecoration(
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      onSaved: (val) {
+                        email = val;
+                      },
+                      validator: (val) {
+                        if (val!.length > 50) {
+                          return "email should be less than 50 ";
+                        }
+                        if (val.length < 5) {
+                          return "email should be larger than 5 ";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
                         hintText: "enter your email",
                         prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 10))),
+                        border:
+                            OutlineInputBorder(borderSide: BorderSide(width: 10)),
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide(width: 1)),
+                      ),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    onSaved: (val) {
-                      password = val;
-                    },
-                    validator: (val) {
-                      if (val!.length > 50) {
-                        return "password should be less than 50 ";
-                      }
-                      if (val.length < 5) {
-                        return "password should be larger than 5 ";
-                      }
-                    },
-                    obscureText: visible,
-                    decoration: InputDecoration(
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: TextFormField(
+                      onSaved: (val) {
+                        password = val;
+                      },
+                      validator: (val) {
+                        if (val!.length > 50) {
+                          return "password should be less than 50 ";
+                        }
+                        if (val.length < 5) {
+                          return "password should be larger than 5 ";
+                        }
+                        return null;
+                      },
+                      obscureText: visible,
+                      decoration: InputDecoration(
                         hintText: "enter your password",
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           onPressed: () {
                             visible = !visible;
                             setState(() {});
                           },
                           icon: visible == false
-                              ? Icon(Icons.visibility)
-                              : Icon(Icons.visibility_off),
+                              ? const Icon(Icons.visibility)
+                              : const Icon(Icons.visibility_off),
                         ),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 10))),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  width: double.infinity,
-                  child: MaterialButton(
-                    color: Colors.blue,
-                    onPressed: () async {
-                      var res = await signUP();
-                      if (res != null) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                      } else
-                        print("signup failed");
-                    },
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 35),
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide(width: 10)),
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(width: 1)),
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("you have account?"),
-                    MaterialButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignIn()));
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    width: double.infinity,
+                    height: 90,
+                    child: MaterialButton(
+                      color: Colors.blue,
+                      onPressed: () async {
+                        var res = await signUP();
+                        if (res != null) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
+                        } else
+                          print("signup failed");
                       },
-                      child: Text(
-                        "Sign In",
-                        style: TextStyle(color: Colors.blue),
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(fontSize: 35),
                       ),
-                    )
-                  ],
-                )
-              ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("you have account?"),
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => SignIn()));
+                        },
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

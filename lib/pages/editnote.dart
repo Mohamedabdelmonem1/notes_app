@@ -1,36 +1,35 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:testproject/pages/homepage.dart';
+
+import 'homepage.dart';
 
 class Edit extends StatefulWidget {
   final docid;
   final list;
-  const Edit({Key? key, this.docid,this.list}) : super(key: key);
+  const Edit({Key? key, this.docid, this.list}) : super(key: key);
   @override
   State<Edit> createState() => _EditState();
 }
 
 class _EditState extends State<Edit> {
-  showloading(context) async {
+  showLoading(context) async {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             title: Text("please wait"),
-            content: Container(
+            content: SizedBox(
                 height: 50, child: Center(child: CircularProgressIndicator())),
           );
         });
   }
 
-  GlobalKey<FormState> formstate = new GlobalKey<FormState>();
+  GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   var title;
   var notes;
@@ -38,41 +37,49 @@ class _EditState extends State<Edit> {
   var imageurl;
   var ref;
 
-  editnote(context) async {
+  editNote(context) async {
     var formdata = formstate.currentState;
-    if (image == null){
+    if (image == null) {
       if (formdata!.validate()) {
-        showloading(context);
+        showLoading(context);
         formdata.save();
-        var notesref = FirebaseFirestore.instance.collection("notes").doc(widget.docid).update({
+        var notesref = FirebaseFirestore.instance
+            .collection("notes")
+            .doc(widget.docid)
+            .update({
           "title": title,
           "notes": notes,
           "imageurl": imageurl,
-
         }).then((value) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        }).catchError((e){
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        }).catchError((e) {
           print(e);
         });
       }
-    }else{
+    } else {
       if (formdata!.validate()) {
-        showloading(context);
+        showLoading(context);
         formdata.save();
         await ref.putFile(image);
         imageurl = await ref.getDownloadURL();
-        var notesref = FirebaseFirestore.instance.collection("notes").doc(widget.docid).update({
+        var notesref = FirebaseFirestore.instance
+            .collection("notes")
+            .doc(widget.docid)
+            .update({
           "title": title,
           "notes": notes,
           "imageurl": imageurl,
         }).then((value) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        }).catchError((e){
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        }).catchError((e) {
           print(e);
         });
-
       }
     }
   }
@@ -102,7 +109,7 @@ class _EditState extends State<Edit> {
             },
             maxLength: 30,
             minLines: 1,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "title", prefixIcon: Icon(Icons.note)),
           ),
           SizedBox(
@@ -125,7 +132,7 @@ class _EditState extends State<Edit> {
             maxLength: 200,
             minLines: 1,
             maxLines: 3,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 labelText: "notes", prefixIcon: Icon(Icons.note)),
           ),
           SizedBox(
@@ -136,18 +143,16 @@ class _EditState extends State<Edit> {
               showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return Container(
+                    return SizedBox(
                       height: 200,
                       child: Column(
                         children: [
-                          Container(
-                            child: Text(
-                              "Choose photo from",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.bold),
-                            ),
+                          const Text(
+                            "Choose photo from",
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           MaterialButton(
@@ -165,7 +170,7 @@ class _EditState extends State<Edit> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(Icons.camera),
                                 SizedBox(
@@ -178,7 +183,7 @@ class _EditState extends State<Edit> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           MaterialButton(
@@ -196,7 +201,7 @@ class _EditState extends State<Edit> {
                                 Navigator.pop(context);
                               }
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(Icons.photo_outlined),
                                 SizedBox(
@@ -214,18 +219,26 @@ class _EditState extends State<Edit> {
                     );
                   });
             },
-            child: Text("Edit photo"),
+            child: Container(
+                width: 125,
+                height: 40,
+                decoration: const BoxDecoration(color: Colors.blue),
+                child:const Center(
+                    child: Text(
+                  "Edit photo",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ))),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           MaterialButton(
             padding: EdgeInsets.symmetric(horizontal: 20),
             color: Colors.blue,
             onPressed: () async {
-              await editnote(context);
+              await editNote(context);
             },
-            child: Text(
+            child: const Text(
               "Edit note",
               style: TextStyle(
                   color: Colors.white,

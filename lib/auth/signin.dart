@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:testproject/pages/homepage.dart';
 import 'package:testproject/auth/signup.dart';
+
+import '../pages/homepage.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -16,21 +16,23 @@ class _SignInState extends State<SignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  showloading() async {
+  showLoading() async {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             title: Text("please wait"),
-            content: Container(
-                height: 50, child: Center(child: CircularProgressIndicator())),
+            content: SizedBox(
+              height: 50,
+              child: Center(child: CircularProgressIndicator()),
+            ),
           );
         });
   }
 
   signIn() async {
     try {
-      showloading();
+      showLoading();
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       return credential;
@@ -47,96 +49,106 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 40, bottom: 60, left: 15),
-                child: const Text(
-                  "Sign In",
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: const EdgeInsets.only(top: 120, bottom: 60, left: 15),
+                  child: const Text(
+                    "Sign In",
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  ),
+                  //Image.asset("images/image.jpg"),
                 ),
-                //Image.asset("images/image.jpg"),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
+                const SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
                       hintText: "enter your email",
                       prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 10))),
+                      border:
+                          OutlineInputBorder(borderSide: BorderSide(width: 10)),
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide(width: 1)),
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: passwordController,
-                  obscureText: visible,
-                  decoration: InputDecoration(
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: passwordController,
+                    obscureText: visible,
+                    decoration: InputDecoration(
                       hintText: "enter your password",
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       suffixIcon: IconButton(
                         onPressed: () {
                           visible = !visible;
                           setState(() {});
                         },
                         icon: visible == false
-                            ? Icon(Icons.visibility)
-                            : Icon(Icons.visibility_off),
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
                       ),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 10))),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                width: double.infinity,
-                child: MaterialButton(
-                  color: Colors.blue,
-                  onPressed: () async {
-                    var user = await signIn();
-                    if (user != null) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    } else
-                      print("signin failed");
-                  },
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(fontSize: 35),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide(width: 10)),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(width: 1)),
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Don't have account?"),
-                  MaterialButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp()));
+                const SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  width: double.infinity,
+                  height: 90,
+                  child: MaterialButton(
+                    color: Colors.blue,
+                    onPressed: () async {
+                      var user = await signIn();
+                      if (user != null) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => HomePage()));
+                      } else
+                        print("signin failed");
                     },
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(color: Colors.blue),
+                    child: const Text(
+                      "Sign In",
+                      style: TextStyle(fontSize: 35),
                     ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ));
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have account?"),
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUp()));
+                      },
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          )),
+    );
   }
 }
